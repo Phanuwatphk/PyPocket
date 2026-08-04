@@ -1,0 +1,52 @@
+flowchart TD
+    Start([เริ่มต้นโปรแกรม]) --> InitData["กำหนดค่าเริ่มต้น<br>transactions = []<br>EXPENSE_CATEGORIES"]
+    InitData --> ShowMenu["แสดงเมนูหลัก 0-4"]
+    
+    ShowMenu --> InputChoice[/"รับค่า user_choice"/]
+    InputChoice --> DecisionChoice{"user_choice คืออะไร?"}
+
+    %% เมนู 0: ออกจากโปรแกรม
+    DecisionChoice -- "0" --> ExitProg["แสดงข้อความขอบคุณ"] --> EndProg([จบการทำงาน])
+
+    %% เมนู 1: บันทึกรายรับ
+    DecisionChoice -- "1" --> InputIncAmt[/"กรอกจำนวนเงินรายรับ"/]
+    InputIncAmt --> CheckIncAmt{"จำนวนเงิน > 0<br>และเป็นตัวเลข?"}
+    CheckIncAmt -- ไม่ใช่ --> ErrIncAmt["แสดงข้อผิดพลาด"] --> ShowMenu
+    CheckIncAmt -- ใช่ --> SetIncCat["กำหนดหมวดหมู่ = 'รายรับ'"]
+    SetIncCat --> InputIncNote[/"กรอกรายละเอียดเพิ่มเติม"/]
+    InputIncNote --> SaveInc["บันทึกข้อมูลลง transactions"]
+    SaveInc --> AskNextAction
+
+    %% เมนู 2: บันทึกรายจ่าย
+    DecisionChoice -- "2" --> InputExpAmt[/"กรอกจำนวนเงินรายจ่าย"/]
+    InputExpAmt --> CheckExpAmt{"จำนวนเงิน > 0<br>และเป็นตัวเลข?"}
+    CheckExpAmt -- ไม่ใช่ --> ErrExpAmt["แสดงข้อผิดพลาด"] --> ShowMenu
+    CheckExpAmt -- ใช่ --> ShowExpCatMenu["แสดงเมนูหมวดหมู่ 1-9"]
+    
+    ShowExpCatMenu --> InputCatChoice[/"รับค่า cat_choice"/]
+    InputCatChoice --> DecisionCat{"cat_choice คืออะไร?"}
+    
+    DecisionCat -- "1 ถึง 8" --> SetStdCat["ใช้หมวดหมู่ตามรายการ"] --> InputExpNote[/"กรอกรายละเอียดเพิ่มเติม"/]
+    DecisionCat -- "9" --> InputCustomCat[/"กรอกหมวดหมู่เอง"/] --> InputExpNote
+    DecisionCat -- อื่นๆ --> ErrCatChoice["แสดงข้อผิดพลาด"] --> ShowExpCatMenu
+    
+    InputExpNote --> SaveExp["บันทึกข้อมูลลง transactions"]
+    SaveExp --> AskNextAction
+
+    %% เมนู 3: สรุปยอดคงเหลือ
+    DecisionChoice -- "3" --> CalBalance["คำนวณรายรับรวม รายจ่ายรวม และคงเหลือ"]
+    CalBalance --> ShowBalance["แสดงยอดเงินคงเหลือ"]
+    ShowBalance --> AskNextAction
+
+    %% เมนู 4: แสดงประวัติ
+    DecisionChoice -- "4" --> CheckHist{"มีข้อมูลใน<br>transactions ไหม?"}
+    CheckHist -- ไม่มี --> ShowNoData["แสดง 'ยังไม่มีข้อมูล'"] --> AskNextAction
+    CheckHist -- มี --> ShowHistData["วนลูปแสดงประวัติทั้งหมด"] --> AskNextAction
+
+    %% ตัวเลือกไม่ถูกต้อง
+    DecisionChoice -- อื่นๆ --> ErrMenu["แสดงข้อผิดพลาด"] --> ShowMenu
+
+    %% ส่วนถามการทำรายการถัดไป
+    AskNextAction[/"รับค่า next_action"/] --> DecisionNext{"next_action คืออะไร?"}
+    DecisionNext -- "0" --> ExitProg
+    DecisionNext -- "Enter / อื่นๆ" --> ShowMenu
