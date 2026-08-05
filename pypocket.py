@@ -29,7 +29,7 @@ def save_transactions(transactions):
     """บันทึกประวัติรายการลงไฟล์ JSON"""
     try:
         with DATA_FILE.open("w", encoding="utf-8") as file:
-            json.dump(transactions, file, ensure_ascii=False, indent=2)
+            json.dump(transactions, file, ensure_ascii=False, indent=4)
     except OSError:
         print("ข้อผิดพลาด: ไม่สามารถบันทึกไฟล์ประวัติได้")
 
@@ -57,7 +57,8 @@ def display_menu():
     """ฟังก์ชันสำหรับแสดงหน้าต่างเมนูหลัก"""
     clear_terminal()
     print("\n" + "="*30)
-    print("        PyPocket Menu        ")
+    # print("        PyPocket Menu        ")
+    print("\tPyPocket Menu")
     print("="*30)
     print("1. บันทึกรายรับ")
     print("2. บันทึกรายจ่าย")
@@ -121,7 +122,7 @@ while True:
                 break
             # กรณีเลือก 9 (อื่นๆ) ให้ผู้ใช้พิมพ์หมวดหมู่เอง
             elif cat_choice == "9":
-                custom_cat = input("กรุณากรอกหมวดหมู่ที่ต้องการ: ").strip()
+                custom_cat = input("กรุณากรอกหมวดหมู่ที่ต้องการ (กด enter สำหรับอื่นๆ): ").strip()
                 category = custom_cat if custom_cat else "อื่นๆ"
                 break
             else:
