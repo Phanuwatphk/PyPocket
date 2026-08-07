@@ -57,7 +57,6 @@ def display_menu():
     """ฟังก์ชันสำหรับแสดงหน้าต่างเมนูหลัก"""
     clear_terminal()
     print("\n" + "="*30)
-    # print("        PyPocket Menu        ")
     print("\tPyPocket Menu")
     print("="*30)
     print("1. บันทึกรายรับ")
